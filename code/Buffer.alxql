@@ -1,0 +1,58 @@
+-- Operators: + - * / & | ! == != < > <= >=
+/*
+
+CREATE      [DB,...]
+DELETE      [DB,...]
+LOAD        [DB,...]
+SAVE        [DB,...]
+DROP        [DB,...]
+PATH        "PATH"
+PRINT       [STATEMENT]
+
+INSERT      ...
+REMOVE      [STATEMENT]
+DELETE      [STATEMENT]
+UPDATE      [STATEMENT]
+
+STATEMENT: [
+    SELECT ...
+    WHERE  ...
+    FROM   [DB]
+]
+
+AS          BUILD & NAME new ROW
+TO          NEW Entry
+
+PRINT 
+SELECT *,10*1 AS WOW
+WHERE Hello==13 AND OR NOT
+FROM db1;
+
+*/
+
+/*
+
+REMOVE
+
+DELETE Wow
+FROM db1;
+
+COPY db2
+FROM db1;
+
+MOVE db2
+WHERE Hello==13
+FROM db1;
+
+INSERT 10,10,20
+FROM db1
+
+DELETE
+FROM db1
+WHERE Hello==13;
+
+UPDATE Alex TO 10
+FROM db1
+WHERE Hello==13;
+
+*/

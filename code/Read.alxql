@@ -1,4 +1,4 @@
-PATH "./data";
+PATH *;
 
 LOAD db1,db2;
 PRINT *;

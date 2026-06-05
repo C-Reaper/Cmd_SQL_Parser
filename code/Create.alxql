@@ -1,0 +1,22 @@
+CREATE db1;
+
+CREATE Hello VARCHAR,World FLOAT,Hello1 LONG,World1 INT
+FROM db1,db2;
+
+INSERT "Hello World",1.0,5,9
+FROM db1,db2;
+
+INSERT "Hello Welt",2.0,6,10
+FROM db1,db2;
+
+INSERT "Hallo World",3.0,7,11
+FROM db1,db2;
+
+INSERT "Hallo Welt",4.0,8,12
+FROM db1,db2;
+
+PRINT *;
+PRINT db1,db2;
+
+SAVE db1,db2;
+DELETE db1,db2;
