@@ -1,115 +1,127 @@
 #include "/home/codeleaded/System/Static/Library/AlxParser.h"
 #include "/home/codeleaded/System/Static/Container/Database.h"
 
-void Print_Func(void* ptr,DB_Info* info){
-    if(info->size==1) printf("(char) %d\t",*(char*)ptr);
-    if(info->size==2) printf("(short) %d\t",*(short*)ptr);
-    if(info->size==4) printf("(int) %d\t",*(int*)ptr);
-    if(info->size==8) printf("(long) %ld\t",*(long*)ptr);
+typedef float FLOAT;
+typedef unsigned short WORD;
+typedef unsigned int DWORD;
+typedef unsigned long long QWORD;
+typedef CStr VARCHAR;
+
+CStr DB_Fn_CStr_Float(void* ptr){
+    return (char*)Number_Get(*(FLOAT*)ptr);
+}
+CStr DB_Fn_CStr_Word(void* ptr){
+    return (char*)Number_Get(*(WORD*)ptr);
+}
+CStr DB_Fn_CStr_DWord(void* ptr){
+    return (char*)Number_Get(*(DWORD*)ptr);
+}
+CStr DB_Fn_CStr_QWord(void* ptr){
+    return (char*)Number_Get(*(QWORD*)ptr);
+}
+CStr DB_Fn_CStr_VarChar(void* ptr){
+    return CStr_Cpy((char*)ptr);
 }
 
-DB_Bool Test_Func(Vector* vec){
-    for(int i = 0;i<vec->size;i++){
-        void* e = *(void**)Vector_Get(vec,i);
-        if(i==0 && *(short*)e==4) return DB_TRUE;
-    }
-    return DB_FALSE;
+char DB_Fn_Cmp_Float(void* ptr1,void* ptr2){
+    const FLOAT p1 = *(FLOAT*)ptr1;
+    const FLOAT p2 = *(FLOAT*)ptr2;
+    return p1 > p2 ? 1 : (p1 < p2 ? -1 : 0);
+}
+char DB_Fn_Cmp_Word(void* ptr1,void* ptr2){
+    const WORD p1 = *(WORD*)ptr1;
+    const WORD p2 = *(WORD*)ptr2;
+    return p1 > p2 ? 1 : (p1 < p2 ? -1 : 0);
+}
+char DB_Fn_Cmp_DWord(void* ptr1,void* ptr2){
+    const DWORD p1 = *(DWORD*)ptr1;
+    const DWORD p2 = *(DWORD*)ptr2;
+    return p1 > p2 ? 1 : (p1 < p2 ? -1 : 0);
+}
+char DB_Fn_Cmp_QWord(void* ptr1,void* ptr2){
+    const QWORD p1 = *(QWORD*)ptr1;
+    const QWORD p2 = *(QWORD*)ptr2;
+    return p1 > p2 ? 1 : (p1 < p2 ? -1 : 0);
+}
+char DB_Fn_Cmp_VarChar(void* ptr1,void* ptr2){
+    char* const p1 = (char*)ptr1;
+    char* const p2 = (char*)ptr2;
+    return CStr_Cmp(p1,p2) == 1 ? 0 : 1;//-1 ignored not with !
 }
 
-#define TOKEN_CUSTOM_HELLO      TOKEN_START+0
-#define TOKEN_CUSTOM_WORLD      TOKEN_START+1
-
-#define TOKEN_CUSTOM_ASS        TOKEN_START+2
-#define TOKEN_CUSTOM_ADD        TOKEN_START+3
-#define TOKEN_CUSTOM_SUB        TOKEN_START+4
-#define TOKEN_CUSTOM_NEG        TOKEN_START+5
-#define TOKEN_CUSTOM_DEC        TOKEN_START+6
+DB_Bool DB_Fn_Test(Vector* vec){
+    VARCHAR v0 = *(VARCHAR*)Vector_Get(vec,0);
+    WORD    v1 = **(WORD**)Vector_Get(vec, 1);
+    FLOAT   v2 = **(FLOAT**)Vector_Get(vec,2);
+    DWORD   v3 = **(DWORD**)Vector_Get(vec,3);
+    QWORD   v4 = **(QWORD**)Vector_Get(vec,4);
+    return v1 < 200U;
+}
 
 int main(){
-
-    Database db = Database_Make(3,
+    Database db = Database_Make(
+        5,
         (DB_Type[]){ 
-            DB_Type_New(2,"short",NULL),
-            DB_Type_New(4,"int",NULL),
-            DB_Type_New(8,"long",NULL)
+            DB_Type_New(-1,           "VARCHAR",DB_TYPE_NOMEMBERS,DB_Fn_CStr_VarChar,DB_Fn_Cmp_VarChar),
+            DB_Type_New(sizeof(WORD), "WORD",   DB_TYPE_NOMEMBERS,DB_Fn_CStr_Word,   DB_Fn_Cmp_Word   ),
+            DB_Type_New(sizeof(FLOAT),"FLOAT",  DB_TYPE_NOMEMBERS,DB_Fn_CStr_Float,  DB_Fn_Cmp_Float  ),
+            DB_Type_New(sizeof(DWORD),"DWORD",  DB_TYPE_NOMEMBERS,DB_Fn_CStr_DWord,  DB_Fn_Cmp_DWord  ),
+            DB_Type_New(sizeof(QWORD),"QWORD",  DB_TYPE_NOMEMBERS,DB_Fn_CStr_QWord,  DB_Fn_Cmp_QWord  )
         },
-        (char*[]){ "Hello","World","Wtf" }
+        (char*[]){
+            "Name",
+            "IQ",
+            "Height",
+            "Money",
+            "ID",
+        }
     );
 
-    //Database_Print(&db);
-
     Database_Entry_Push(&db,(void*[]){ 
-        (short[]){ 1 }, 
-        (int[]){ 2 }, 
-        (long[]){ 3 }, 
+        (CStr[]){ "Alex" },
+        (WORD[]){ 69U },
+        (FLOAT[]){ 1.8f },
+        (DWORD[]){ 986000U },
+        (QWORD[]){ 0x3F4A4B5C5E6FULL },
     });
     Database_Entry_Push(&db,(void*[]){ 
-        (short[]){ 4 }, 
-        (int[]){ 5 }, 
-        (long[]){ 6 }, 
+        (CStr[]){ "Yanis" },
+        (WORD[]){ 169U },
+        (FLOAT[]){ 1.8f },
+        (DWORD[]){ 86000U },
+        (QWORD[]){ 0x34A4B5C5E6F7ULL },
     });
     Database_Entry_Push(&db,(void*[]){ 
-        (short[]){ 4 }, 
-        (int[]){ 8 }, 
-        (long[]){ 9 }, 
+        (CStr[]){ "Nick" },
+        (WORD[]){ 255U },
+        (FLOAT[]){ 1.8f },
+        (DWORD[]){ 1686000U },
+        (QWORD[]){ 0x3F4A4B5C56F7ULL },
     });
     Database_Entry_Push(&db,(void*[]){ 
-        (short[]){ 10 }, 
-        (int[]){ 11 }, 
-        (long[]){ 12 }, 
+        (CStr[]){ "Andi" },
+        (WORD[]){ 191U },
+        (FLOAT[]){ 1.8f },
+        (DWORD[]){ 1860000U },
+        (QWORD[]){ 0x3F4A45C5E6F7ULL },
     });
     Database_Entry_Push(&db,(void*[]){ 
-        (short[]){ 13 }, 
-        (int[]){ 14 }, 
-        (long[]){ 15 }, 
+        (CStr[]){ "Marc" },
+        (WORD[]){ 199U },
+        (FLOAT[]){ 1.8f },
+        (DWORD[]){ 9986000U },
+        (QWORD[]){ 0xF4A4B5C5E6F7ULL },
     });
 
     Database_Entry_Update(&db,1,"World",(int[]){ 69 });
+    Database_Entry_Remove(&db,DB_Fn_Test);
+    Database_Print(&db);
 
-    Database_Entry_Remove(&db,Test_Func);
-
-    Database_Print(&db,Print_Func);
-
-    Database_Write(&db,"./Database1.alxql");
-
+    Database_Write(&db,"./db3.alxql");
     Database_Free(&db);
 
-    Database_Read(&db,"./Database1.alxql");
-
-    Database_Print(&db,Print_Func);
-
+    Database_Read(&db,"./db3.alxql");
+    Database_Print(&db);
     Database_Free(&db);
-
-
-    KeywordMap kwm = KeywordMap_Make((KeywordRP[]){
-        KeywordRP_New("Hello",TOKEN_CUSTOM_HELLO),
-        KeywordRP_New("World",TOKEN_CUSTOM_WORLD),
-        KeywordRP_End()
-    });
-    OperatorMap om = OperatorMap_Make((OperatorRP[]){
-        OperatorRP_Make((TT_Type[]){ TOKEN_EQUAL_SIGN,TOKEN_END },                  TOKEN_CUSTOM_ASS,1),
-        OperatorRP_Make((TT_Type[]){ TOKEN_PLUS_SIGN,TOKEN_END },                   TOKEN_CUSTOM_ADD,1),
-        OperatorRP_Make((TT_Type[]){ TOKEN_MINUS_SIGN,TOKEN_END },                  TOKEN_CUSTOM_SUB,1),
-        OperatorRP_Make((TT_Type[]){ TOKEN_MINUS_SIGN,TOKEN_END },                  TOKEN_CUSTOM_NEG,0),
-        OperatorRP_Make((TT_Type[]){ TOKEN_MINUS_SIGN,TOKEN_MINUS_SIGN,TOKEN_END }, TOKEN_CUSTOM_DEC,0),
-        OperatorRP_End()
-    });
-    ReseterMap rsm = ReseterMap_Std();
-    
-    Parser p = Parser_New();
-
-    Parser_Parse_CStr(&p,"a = --a - 1 + (-1) - (--a);",NULL);
-    Parser_Print(&p);
-    Parser_TF_Std(&p);
-    Parser_TF_KW(&p,&kwm);
-    Parser_Print(&p);
-    Parser_TF_OPS(&p,&om,&rsm);
-    Parser_Print(&p);
-    
-    Parser_Free(&p);
-    ReseterMap_Free(&rsm);
-    OperatorMap_Free(&kwm);
-    KeywordMap_Free(&kwm);
-
     return 0;
 }
