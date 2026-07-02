@@ -6,22 +6,36 @@ int main(int argc,char** argv){
     //    exit(1);
     //}
 
+    ///*
     CStr path = Files_cwd();
     CStr target = CStr_Concat(path,"/data");
     CStr_Free(&path);
-    //printf("Target: %s\n",target);
+    printf("Target: %s\n",target);
     
     QueryLanguage ql = QueryLanguage_New(target);
     CStr_Free(&target);
 
-    //QueryLanguage_Load(&ql,"./Database1.alxdb","Database1");
-
-    //QueryLanguage_InterpretLine(&ql,"CREATE db2;");
-    //QueryLanguage_Print(&ql);
-    //QueryLanguage_InterpretLine(&ql," -- Hello World\nLOAD db1; /* WOw \n ok */ LOAD db2;");
-
-    QueryLanguage_InterpretScript(&ql,"./code/Main.alxql");//argv[1]
+    QueryLanguage_InterpretScript(&ql,"./code/Create2.alxql");
     QueryLanguage_Free(&ql);
+    //*/
 
+    /*
+    CStr path = Files_cwd();
+    CStr target = CStr_Concat(path,"/data");
+    CStr_Free(&path);
+
+    QueryLanguage ql = QueryLanguage_New(target);
+    CStr_Free(&target);
+
+    QueryLanguage_Load(&ql,"./data/db1.alxdb","db1");
+    QueryLanguage_Print(&ql);
+    
+    QueryLanguage_PrintDB(&ql,"db1");
+    QueryLanguage_ImportDB(&ql,"./data/customers.csv","db1");
+    QueryLanguage_PrintDB(&ql,"db1");
+
+    QueryLanguage_Save(&ql,"./data/db1.alxdb","db1");
+    QueryLanguage_Free(&ql);
+    */
     return 0;
 }

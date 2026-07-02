@@ -1,0 +1,15 @@
+CREATE customers;
+
+-- Index,Customer Id,First Name,Last Name,Company,City,Country,Phone 1,Phone 2,Email,Subscription Date,Website
+--CREATE i INT,id VARCHAR,fname VARCHAR,lname VARCHAR,company VARCHAR,city VARCHAR,country VARCHAR,phone1 VARCHAR,phone2 VARCHAR,email VARCHAR,subscriptiondate VARCHAR,website VARCHAR
+CREATE id VARCHAR,fname VARCHAR,lname VARCHAR,company VARCHAR,email VARCHAR
+FROM customers;
+
+INCLUDE "./data/customers.csv"
+FROM customers;
+
+PRINT *;
+PRINT customers;
+
+SAVE customers;
+DELETE customers;

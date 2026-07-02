@@ -1,4 +1,4 @@
-CREATE db1;
+CREATE db1,db2;
 
 CREATE Hello VARCHAR,World FLOAT,Hello1 LONG,World1 INT
 FROM db1,db2;
